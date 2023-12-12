@@ -1,46 +1,114 @@
-import os, utils
+import os, utils, utilsPemilik
 
 def daftar():
-    os.system("cls")
-    username = input("Username: ")
-    password = input("Password: ")
-    namaKos = input("Nama Kos: ")
-    
-    try:
-        dataPenghuni = open(f"data/penghuni/{username}.txt", "r")
-        print(f"Akun dengan username {username} sudah terdaftar")
-        utils.pauseClear()
-    
-    except FileNotFoundError:
-        dataPenghuni = open(f"data/penghuni/{username}.txt", "w")
-        dataPenghuni.write(f"{username}\n{password}\n{namaKos}")
-    
-    print("Berhasil terdaftar!")
-    utils.pauseClear()
-    
-def masuk():
-    os.system("cls")
     while True:
+        os.system("cls")
+        utils.printHeader("daftar")
+
         username = input("Username: ")
         password = input("Password: ")
-    
-        try:
-            dataPenghuni = open(f"data/penghuni/{username}.txt", "r")
-            barisData = dataPenghuni.readlines()
-            dataUsername = barisData[0].rstrip("\n")
-            dataPassword = barisData[1].rstrip("\n")
+        namaKos = input("Nama Kos: ")
+        
+        if username.strip() and password.strip() and namaKos.strip():
             
-            if username == dataUsername and password == dataPassword:
-                print("good!")
-                break
-            else:
-                print()
-                
-        except FileNotFoundError:
-            print("Kamu belum terdaftar!\n")
+            akunPenghuni = utils.absolutePath() + f"/data/penghuni/{username}.txt"
+
+            try:
+                dataPenghuni = open(akunPenghuni, "r")
+                print(f"\nAkun dengan username {username} sudah terdaftar")
+                print("Silakan gunakan username lain atau masuk dengan username tersebut!")
+                utils.pauseClear()
+                return True
+            
+            except FileNotFoundError:
+                dataPenghuni = open(akunPenghuni, "w")
+                dataPenghuni.write(f"{username}\n{password}\n{namaKos}")
+                dataPenghuni.close()
+            
+                print("\nBerhasil terdaftar!")
+                utils.pauseClear()
+                return True
+        else:
+            print("\nKolom input tidak boleh ada yang kosong!")
             utils.pauseClear()
-            break
+
+def masuk():
+    while True:
+        os.system("cls")
+        utils.printHeader("masuk")
+        
+        global username
+        username = input("Username: ")
+        password = input("Password: ")
+        global namaKos
+        namaKos = input("Nama Kos: ")
+
+        if username.strip() and password.strip():
+            try:
+                akunPenghuni = utils.absolutePath() + f"/data/penghuni/{username}.txt"
+                dataPenghuni = open(akunPenghuni, "r")
+                barisData = dataPenghuni.readlines()
+                dataUsername = barisData[0].rstrip("\n")
+                dataPassword = barisData[1].rstrip("\n")
+                dataNamaKos = barisData[2].rstrip("\n")
+                dataPenghuni.close()
+                
+                if username == dataUsername and password == dataPassword and namaKos == dataNamaKos:
+                    print(f"\nBerhasil masuk ke akun {username}!")
+                    utils.pauseClear()
+                    return True
+                
+                elif username != dataUsername or password != dataPassword:
+                    print(f"\nUsername atau password kamu salah")
+                    utils.pauseClear()
+                else:
+                    print(f"\nNama kos kamu salah")
+                    utils.pauseClear()
+                    
+            except FileNotFoundError:
+                print("\nAkun kamu belum terdaftar, silakan masuk ke menu daftar!")
+                utils.pauseClear()
+                return False
+        
+        else:
+            print("\nKolom input tidak boleh ada yang kosong!")
+            utils.pauseClear()
 
 def beranda():
-    pass
+    while True:
+        os.system("cls")
+        utils.printHeader("beranda")
+        print(f"Selamat datang di Kos {namaKos}")
+        print(f"Selamat {utils.waktu()}, {username}!\n")
+        utils.printMenu("informasi", "pembayaran", "keluar")
         
+        inputMenu = input("> ").lower()
+        
+        if inputMenu == "1":
+            informasi()
+            continue
+        elif inputMenu == "2":
+            print("\nFitur ini belum tersedia, maaf!")
+            utils.pauseClear()
+        elif inputMenu == "3":
+            break
+        else:
+            print("\nMasukkan inputan yang valid!")
+            utils.pauseClear()
+
+def informasi():
+    while True:
+        os.system("cls")
+        utils.printHeader("informasi")
+        utils.printMenu("lihat informasi", "kembali")
+        
+        inputMenu = input("> ").lower()
+        
+        if inputMenu == "1":
+            utilsPemilik.lihatInformasi()
+            continue
+        elif inputMenu == "2":
+            break
+        else:
+            print("\nMasukkan inputan yang valid!")
+            utils.pauseClear()
