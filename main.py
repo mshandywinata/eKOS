@@ -1,21 +1,20 @@
-import utils, utilsPemilik, utilsPenghuni
-import os
+# STRUKTUR UTAMA PROGRAM
+import utils, utilsPemilik, utilsPenghuni, os
 
 def main():
     while True:
         os.system("cls")
         utils.printHeader("selamat datang di ekos")
         utils.printMenu("pemilik", "penghuni", "keluar")
-        peran = input("> ").lower()
+        pengguna = input("> ")
         
-        if peran == "1":
+        if pengguna == "1":
             while True:
                 os.system("cls")
                 utils.printHeader("daftar/masuk sebagai pemilik")
                 utils.printMenu("daftar", "masuk", "kembali")
                 
-                opsiMenu = input("> ").lower()
-                os.system("cls")
+                opsiMenu = input("> ")
                 
                 if opsiMenu == "1":
                     sudahTerdaftar = utilsPemilik.daftar()
@@ -24,7 +23,7 @@ def main():
                 
                 elif opsiMenu == "2":
                     sudahMasuk = utilsPemilik.masuk()
-                    if sudahMasuk:
+                    if sudahMasuk == True:
                         utilsPemilik.beranda()
                     else:
                         utilsPemilik.daftar()
@@ -33,17 +32,15 @@ def main():
                     break
                     
                 else:
-                    print("\nMasukkan input yang valid!")
-                    utils.pauseClear()
+                    utils.inputTidakValid()
                 
-        elif peran == "2":
+        elif pengguna == "2":
             while True:
                 os.system("cls")
                 utils.printHeader("daftar/masuk sebagai penghuni")
                 utils.printMenu("daftar", "masuk", "kembali")
                 
-                opsiMenu = input("> ").lower()
-                os.system("cls")
+                opsiMenu = input("> ")
                 
                 if opsiMenu == "1":
                     sudahTerdaftar = utilsPenghuni.daftar()
@@ -52,8 +49,10 @@ def main():
                 
                 elif opsiMenu == "2":
                     sudahMasuk = utilsPenghuni.masuk()
-                    if sudahMasuk:
+                    if sudahMasuk == True:
                         utilsPenghuni.beranda()
+                    elif sudahMasuk == None:
+                        continue
                     else:
                         utilsPenghuni.daftar()
 
@@ -61,15 +60,13 @@ def main():
                     break
                     
                 else:
-                    print("\nMasukkan input yang valid!")
-                    utils.pauseClear()
+                    utils.inputTidakValid()
         
-        elif peran == "3":
+        elif pengguna == "3":
             os.system("cls")
             exit()
             
         else:
-            os.system("cls")
             print("\nMasukkan input yang valid!")
             utils.pauseClear()
 
